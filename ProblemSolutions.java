@@ -8,7 +8,9 @@
  *
  ********************************************************************/
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ProblemSolutions {
 
@@ -118,31 +120,69 @@ public class ProblemSolutions {
 
     private void mergeDivisbleByKFirst(int arr[], int k, int left, int mid, int right) {
 
-        // Find sizes of two subarrays to be merged
-        /*
-         * int set1 = mid - left + 1;
-         * int set2 = right - mid;
-         * 
-         * // Create temp arrays
-         * int temp[] = new int[set1];
-         * int temp2[] = new int[set2];
-         * int result[] = new int[set1 + set2];
-         * 
-         * // Copy data to temp arrays
-         * for (int i = 0; i < set1; i++) {
-         * temp[i] = arr[left + 1];
-         * }
-         * 
-         * for (int j = 0; j < set2; j++) {
-         * temp2[j] = arr[mid + 1 + j];
-         * }
-         * 
-         * // Merge the temp arrays
-         * int index = 0, index2 = 0, k = left;
-         * 
-         * 
-         * return;
-         */
+        // Create temp arrays for left and right subarrays
+        int set1 = mid - left + 1;
+        int set2 = right - mid;
+
+        int[] Left = new int[set1];
+        int[] Right = new int[set2];
+
+        // Copy data to temp arrays
+        for (int i = 0; i < Left.length; ++i) {
+            Left[i] = arr[left + i];
+        }
+
+        for (int j = 0; j < Right.length; ++j) {
+            Right[j] = arr[mid + 1 + j];
+        }
+
+        // Make merge array
+        int[] result = new int[set1 + set2];
+
+        // Create pointers for left, right and merged array
+        int leftPointer = 0, rightPointer = 0, resultPointer = 0;
+
+        // Merge the two arrays
+        while (leftPointer < Left.length && rightPointer < Right.length) {
+            // If left element is divisible by k, add to result array
+            if (Left[leftPointer] % k == 0) {
+                result[resultPointer++] = Left[leftPointer++];
+            } else if (Right[rightPointer] % k == 0) {
+                result[resultPointer++] = Right[rightPointer++];
+            } else {
+                // If neither element is divisible by k, add the smaller one to the result
+                if (Left[leftPointer] <= Right[rightPointer]) {
+                    result[resultPointer++] = Left[leftPointer++];
+                } else {
+                    result[resultPointer++] = Right[rightPointer++];
+                }
+            }
+        }
+
+        // Check if pointer is less than left array length
+        while (leftPointer < Left.length) {
+            // If left element is divisible by k, add to result array
+            if (Left[leftPointer] % k == 0) {
+                result[resultPointer++] = Left[leftPointer++];
+            } else {
+                result[resultPointer++] = Left[leftPointer++];
+            }
+        }
+
+        // Check if pointer is less than right array length
+        while (rightPointer < Right.length) {
+            // If right element is divisible by k, add to result array
+            if (Right[rightPointer] % k == 0) {
+                result[resultPointer++] = Right[rightPointer++];
+            } else {
+                result[resultPointer++] = Right[rightPointer++];
+            }
+        }
+
+        // Copy the merged result back to the original array
+        for (int i = 0; i < result.length; i++) {
+            arr[left + i] = result[i];
+        }
 
     } // End method mergeDivisibleByKFirst
 
